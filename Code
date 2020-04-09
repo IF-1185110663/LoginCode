@@ -1,0 +1,27 @@
+Imports System.Data.OleDb
+
+Public Class frmLogin
+
+'The database is put into the bin folder for the following code to read it.
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLogin.Click
+        Dim con As New OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & Application.StartupPath & "\Login.accdb")
+        Dim cmd As OleDbCommand = New OleDbCommand(
+                   "SELECT * FROM tblusers WHERE USERNAME = '" &
+                   txtUsername.Text & "' AND [PASSCODE] = '" & txtPassword.Text & "' ", con)
+        Dim user As String = ""
+        Dim pass As String = ""
+
+        con.Open()
+        Dim sdr As OleDbDataReader = cmd.ExecuteReader()
+        If (sdr.Read() = True) Then
+            user = sdr("USERNAME")
+            pass = sdr("PASSCODE")
+            MessageBox.Show("Login Successfully!")
+            Me.Close()
+        Else
+            MessageBox.Show("Invalid username or password!")
+        End If
+    End Sub
+
+End Class
